@@ -8,8 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="mailkit" Version="4.13.0" />
-    <PackageReference Include="mimekit" Version="4.13.0" />
     <PackageReference Include="Telegram.Bot" Version="22.7.2" />
     <None Update="token.txt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
