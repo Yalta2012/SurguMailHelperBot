@@ -1,3 +1,4 @@
+using System.Globalization;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
@@ -102,7 +103,8 @@ namespace SurguMailBot
                         Int64 chat_id = reader.GetInt64(0);
                         string email = reader.GetString(1);
                         string password = reader.GetString(2);
-                        DateTime last_check = reader.GetDateTime(3);
+                        CultureInfo cultureInfo = CultureInfo.InvariantCulture;
+                        DateTime last_check = DateTime.ParseExact( reader.GetString(3),"yyyy-MM-dd HH:mm:ss",null);
                         result.Add(new UserModel(chat_id, email, password, true, last_check));
 
                     }
@@ -176,6 +178,7 @@ namespace SurguMailBot
 
                 foreach (var user in list)
                 {
+
                     using var command = connection.CreateCommand();
                     if (user._status == false)
                     {
@@ -184,11 +187,12 @@ namespace SurguMailBot
                     else
                     {
                         command.CommandText = "UPDATE Users SET last_check = @last_check WHERE chat_id = @chat_id";
-                        command.Parameters.AddWithValue("@last_check", user._last_check.ToString());
+                        command.Parameters.AddWithValue("@last_check", user._last_check.ToString("yyyy-MM-dd HH:mm:ss"));
 
                     }
                     command.Parameters.AddWithValue("@chat_id", user._chatId);
 
+                    command.Transaction = transaction;
                     command.ExecuteNonQuery();
                 }
 

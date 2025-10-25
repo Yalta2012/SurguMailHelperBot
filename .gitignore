@@ -4,6 +4,9 @@
 
 *.db
 
+.vscode/
+.vs/
+
 bin/
 
 obj/
